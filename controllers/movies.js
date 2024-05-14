@@ -16,41 +16,41 @@ export class MovieController {
     res.status(404).json({ message: 'Movie not found' })
   }
 
-  static async create(req, res) {
-    const result = validateMovie(req.body);
-  
+  static async create (req, res) {
+    const result = validateMovie(req.body)
+
     if (!result.success) {
-      return res.status(400).json({ error: JSON.parse(result.error.message) });
+      return res.status(400).json({ error: JSON.parse(result.error.message) })
     }
-  
-    const newMovie = await MovieModel.create({ input: result.data });
-  
+
+    const newMovie = await MovieModel.create({ input: result.data })
+
     fs.readFile('movies.json', 'utf8', (err, data) => {
       if (err) {
-        console.error(err);
-        return res.status(500).json({ error: 'Internal Server Error' });
+        console.error(err)
+        return res.status(500).json({ error: 'Internal Server Error' })
       }
-  
-      let movies = [];
-  
+
+      let movies = []
+
       try {
-        movies = JSON.parse(data);
+        movies = JSON.parse(data)
       } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: 'Internal Server Error' });
+        console.error(error)
+        return res.status(500).json({ error: 'Internal Server Error' })
       }
-  
-      movies.push(newMovie);
-  
+
+      movies.push(newMovie)
+
       fs.writeFile('movies.json', JSON.stringify(movies), (err) => {
         if (err) {
-          console.error(err);
-          return res.status(500).json({ error: 'Internal Server Error' });
+          console.error(err)
+          return res.status(500).json({ error: 'Internal Server Error' })
         }
-  
-        res.status(201).json(newMovie);
-      });
-    });
+
+        res.status(201).json(newMovie)
+      })
+    })
   }
 
   static async delete (req, res) {
